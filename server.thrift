@@ -13,24 +13,24 @@ service server {
     void clear_all_faults(),
 
     // Used to clear a specific method fault
-    void clear_fault(string method),
+    void clear_fault(1:string method),
 
     // Set fault on a specific list of methods
-    void set_fault(list<string> methods,    // the list of methods to operate on
-                   bool random,             // Must we return random errno
-                   i32 err_no,              // A specific errno to return
-                   i32 probability,         // Fault probability over 100 000
-                   string regexp,           // A regexp matching a victim file
-                   bool kill_caller,        // Kill -9 the caller process
-                   i32 delay_us,            // Delay to inject in the fs calls
-                   bool auto_delay),        // Not implemented yet: Will be used to simulate SSDs latencies
+    void set_fault(1:list<string> methods,    // the list of methods to operate on
+                   2:bool random,             // Must we return random errno
+                   3:i32 err_no,              // A specific errno to return
+                   4:i32 probability,         // Fault probability over 100 000
+                   5:string regexp,           // A regexp matching a victim file
+                   6:bool kill_caller,        // Kill -9 the caller process
+                   7:i32 delay_us,            // Delay to inject in the fs calls
+                   8:bool auto_delay),        // Not implemented yet: Will be used to simulate SSDs latencies
 
     // Works like set_fault but applies the fault to all methods
-    void set_all_fault(bool random,
-                       i32 err_no,
-                       i32 probability,
-                       string regexp,
-                       bool kill_caller,
-                       i32 delay_us,
-                       bool auto_delay),
+    void set_all_fault(1:bool random,
+                       2:i32 err_no,
+                       3:i32 probability,
+                       4:string regexp,
+                       5:bool kill_caller,
+                       6:i32 delay_us,
+                       7:bool auto_delay),
 }
