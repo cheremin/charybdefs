@@ -5,9 +5,7 @@ import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.util.*;
 
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 
 import static org.hamcrest.Matchers.is;
@@ -22,22 +20,27 @@ public abstract class BaseFileSystemRegularOperationsTest {
 	public static final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
 
-	private static File target;
+	private static File targetDirectory;
 
 	@BeforeClass
 	public static void setUpFolder() throws Exception {
-		target = temporaryFolder.newFolder( "target" );
+		targetDirectory = temporaryFolder.newFolder( "targetDirectory" );
 	}
 
-	protected static File targetFolder() {
-		return target;
+	@Before
+	public void cleanup() throws Exception {
+		CharybdeFSMountUtils.cleanDirectory( targetDirectory() );
+	}
+
+	protected static File targetDirectory() {
+		return targetDirectory;
 	}
 
 	@Test
 	public void symlinkCouldBeCreatedAndIdentifiedAsSymlink() throws Exception {
 		//Verifies [https://github.com/scylladb/charybdefs/issues/10]
 
-		final File testFile = new File( targetFolder(), "test" );
+		final File testFile = new File( targetDirectory(), "test" );
 		assertThat( testFile.createNewFile(),
 		            is( true )
 		);
@@ -45,7 +48,7 @@ public abstract class BaseFileSystemRegularOperationsTest {
 		            is( true )
 		);
 
-		final File link = new File( targetFolder(), "test.link" );
+		final File link = new File( targetDirectory(), "test.link" );
 
 		Files.createSymbolicLink( link.toPath(), testFile.toPath() );
 
@@ -70,8 +73,9 @@ public abstract class BaseFileSystemRegularOperationsTest {
 			final String fileName = fileNames[i];
 			final String linkName = linkNames[i];
 
-			final File testFile = new File( targetFolder(), fileName );
-			final File symlink = new File( targetFolder(), linkName );
+			final File testFile = new File( targetDirectory(), fileName );
+			final File symlink = new File( targetDirectory(), linkName );
+			testFile.createNewFile();
 
 			Files.createSymbolicLink( symlink.toPath(), testFile.toPath() );
 
@@ -81,7 +85,7 @@ public abstract class BaseFileSystemRegularOperationsTest {
 
 		for( final File symlink : symlinks ) {
 			assertThat(
-					"Symlink-ed file must exist",
+					"Symlink-ed file[" + symlink.getAbsolutePath() + "] must exist",
 					Files.exists( symlink.toPath() ),
 					is( true )
 			);
@@ -90,7 +94,7 @@ public abstract class BaseFileSystemRegularOperationsTest {
 
 	@Test
 	public void valueWrittenCouldBeReadBackUnchanged() throws Exception {
-		final File testFile = new File( targetFolder(), "test" );
+		final File testFile = new File( targetDirectory(), "test" );
 		final long writtenValue = 0x1234_5678_9ABC_DEF1L;
 		try (final RandomAccessFile raf = new RandomAccessFile( testFile, "rw" )) {
 			raf.writeLong( writtenValue );

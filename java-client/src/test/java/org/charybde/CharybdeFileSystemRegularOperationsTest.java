@@ -25,8 +25,8 @@ public class CharybdeFileSystemRegularOperationsTest extends BaseFileSystemRegul
 	@Before
 	public void setUp() throws Exception {
 		CharybdeFSMountUtils.cleanDirectory( dataFolder );
-		CharybdeFSMountUtils.cleanDirectory( targetFolder() );
-		charybde = CharybdeFSMountUtils.mount( targetFolder(), dataFolder );
+		CharybdeFSMountUtils.cleanDirectory( targetDirectory() );
+		charybde = CharybdeFSMountUtils.mount( targetDirectory(), dataFolder );
 	}
 
 	@After
