@@ -23,7 +23,7 @@ public class CharybdeFileSystemRegularOperationsTest {
 	private static File dataFolder;
 
 	@BeforeClass
-	public void setUpFolder() throws Exception {
+	public static void setUpFolder() throws Exception {
 		mountOverFolder = temporaryFolder.newFolder( "mounted" );
 		dataFolder = temporaryFolder.newFolder( "data" );
 	}
