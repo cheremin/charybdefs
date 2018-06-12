@@ -19,13 +19,21 @@ public class CharybdeFileSystemRegularOperationsTest {
 	@ClassRule
 	public static final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
+	private static File mountOverFolder;
+	private static File dataFolder;
+
+	@BeforeClass
+	public void setUpFolder() throws Exception {
+		mountOverFolder = temporaryFolder.newFolder( "mounted" );
+		dataFolder = temporaryFolder.newFolder( "data" );
+	}
+
 	private AutoCloseable charybde = null;
-	private File mountOverFolder;
 
 	@Before
 	public void setUp() throws Exception {
-		mountOverFolder = temporaryFolder.newFolder( "mounted" );
-		final File dataFolder = temporaryFolder.newFolder( "data" );
+		CharybdeFSMountUtils.cleanDirectory( dataFolder );
+		CharybdeFSMountUtils.cleanDirectory( mountOverFolder );
 		charybde = CharybdeFSMountUtils.mount( mountOverFolder, dataFolder );
 	}
 

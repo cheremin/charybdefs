@@ -75,7 +75,10 @@ public abstract class CharybdeFSMountUtils {
 
 	}
 
-	private static void cleanDirectory( final File directory ) {
+	public static void cleanDirectory( final File directory ) {
+		if( !directory.isDirectory() ) {
+			throw new IllegalArgumentException( "[" + directory + "] is not a directory" );
+		}
 		final File[] files = directory.listFiles();
 		if( files != null ) {
 			for( final File file : files ) {
