@@ -23,7 +23,7 @@ public abstract class BaseFileSystemRegularOperationsTest {
 	private static File targetDirectory;
 
 	@BeforeClass
-	public static void setUpFolder() throws Exception {
+	public static void createTargetFolder() throws Exception {
 		targetDirectory = temporaryFolder.newFolder( "targetDirectory" );
 	}
 
